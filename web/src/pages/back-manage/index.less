@@ -1,0 +1,50 @@
+.back-manage-page {
+  height: 100%;
+  .layout-wrap {
+    height: 100%;
+    border: 1px solid red;
+    .logo {
+      width: 150px;
+      margin: 10px auto;
+    }
+    .layout-header {
+      display: flex;
+      justify-content: space-between;
+      .bread-crumb {
+        flex: 0 0 40%;
+        padding: 14px;
+        .ant-breadcrumb-link {
+          color: white;
+          font-size: 18px;
+        }
+        .ant-breadcrumb-separator {
+          color: white;
+          font-size: 18px;
+        }
+      }
+      .user-tips {
+        flex: 0 0 30%;
+        text-align: right;
+        .current-user {
+          display: inline-block;
+          margin-right: 20px;
+          color: #fff;
+          font-size: 20px;
+        }
+        .login-out-btn span {
+          font-size: 20px;
+        }
+      }
+    }
+    .menu .ant-menu-item {
+      color: white;
+      font-size: 20px;
+      .anticon {
+        font-size: 20px;
+      }
+      .anticon + span {
+        font-size: 20px;
+      }
+    }
+  }
+}
