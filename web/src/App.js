@@ -25,8 +25,8 @@ class App extends Component {
         <Switch>
           <Route path='/login' component={Login}/>
           <Route path='/admin' component={Admin}/>
-          <Route path='/back-manage' component={BackManage}/>
-          <Route path='/big-screen' component={BigScreen}/>
+          <Route path='/back' component={BackManage}/>
+          <Route path='/web' component={BigScreen}/>
           <Route path='/' component={Admin}/>
         </Switch>
       </BrowserRouter>

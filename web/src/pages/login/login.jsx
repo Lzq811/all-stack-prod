@@ -21,11 +21,12 @@ export default class Login extends Component {
       encryptType: 'md5',
       timestamp: new Date().getTime(),
       password: md5(values.password),
-      userName: values.username,
+      username: values.username,
     }
     const res = await ReqLogin(params)
-    if (res.code === '0') {
+    if (res.code === 0) {
       message.success('登录成功!')
+      sessionStorage.setItem('token', res.objectResult.token)
       /* 页面跳转, push(), goback(), replace(), go()*/
       this.props.history.replace('/admin') // 不需要回退回来的时候用 replace
     } else {
@@ -33,13 +34,7 @@ export default class Login extends Component {
     }
   }
 
-  componentDidMount () {
-    
-  }
-
   render () {
-    
-
     return ( <div className='login-wrap'>
       <LoginBac className='bac-box'></LoginBac>
       <div className='form-container'>

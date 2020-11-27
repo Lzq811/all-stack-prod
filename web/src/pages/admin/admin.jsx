@@ -12,12 +12,12 @@ export default class Admin extends Component {
       {
         itemName: '大屏展示',
         pictureUrl: 'http://big-screen.oss-cn-shenzhen.aliyuncs.com/beijingRoad/develop.png',
-        targetLink: '/big-screen'
+        targetLink: '/web'
       },
       {
         itemName: '后台管理',
         pictureUrl: 'http://big-screen.oss-cn-shenzhen.aliyuncs.com/beijingRoad/passenger.png',
-        targetLink: '/back-manage'
+        targetLink: '/back'
       }
     ],
     // initScreenNum: Array.from(Array(6), (v,k) =>k), // 創建一個長度為6的數組
@@ -45,9 +45,18 @@ export default class Admin extends Component {
     })
   }
 
-  componentDidMount () {
-    
+  checkToken = () => {
+    const token = sessionStorage.getItem('token')
+    if (!token || token.length <= 0) {
+      // 说明没有正常登陆
+      this.props.history.push('/login') // 到登陆页面
+    }
   }
+
+  componentDidMount () {
+    this.checkToken()
+  }
+
   render() {
 
     const {screenData, defaultItemSrc, currentIndex} = this.state

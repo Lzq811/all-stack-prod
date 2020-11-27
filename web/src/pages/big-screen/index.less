@@ -1,3 +1,29 @@
 .big-screen-page {
-  color: gold;
+  width: 1920px;
+  height: 1080px;
+  background-image: url('../../assets/image/bac.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  position: relative;
+  .main-container {
+    width: 99%;
+    height: 90%;
+    margin: 0.5% auto 0;
+    display: flex;
+    justify-content: space-between;
+    .left-container, .right-container {
+      flex: 0 0 21%;
+    }
+    .center-container {
+      flex: 0 0 57%;
+      border: 1px solid gold;
+    }
+  }
+  .option-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #00B4FF;
+    text-align: center;
+    margin-top: -6px;
+  }
 }
