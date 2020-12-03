@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-import { Table, Button, Modal, Form, Input, message } from 'antd'
+import { Table, Button, Modal, Form, Input, Select, message } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 
@@ -8,6 +8,7 @@ import * as YearApi from '../../../api/year'
 
 import './index.less'
 
+const {Option} = Select
 export default class User extends Component {
 
   formRef = React.createRef(<FormInstance />)
@@ -20,10 +21,26 @@ export default class User extends Component {
     columns: [
       {title: 'id', dataIndex: 'id', align: 'center'},
       {title: '年份', dataIndex: 'year', align: 'center'},
+      {title: '默认月份', dataIndex: 'curr_month', align: 'center', render: text => `${text}月`},
       {title: '默认选中', dataIndex: 'selectDefault', align: 'center', render: text => text ? <b style={{color: '#3DB389',fontSize: '16px'}}>是</b> : <b style={{fontSize: '16px'}}>否</b>},
       {title: '操作', dataIndex: '操作', align: 'center', render: (text, record) => (
         <div className='edit-btn'><Button onClick={() => { this.select(record) }} style={{color: '#3DB389'}} type="text">设为选中</Button><Button onClick={() => { this.edit(record) }} className='edit-btn' type="text">编辑</Button><Button onClick={() => { this.del(record) }} className='delete-btn' type="text">删除</Button></div>
       )}
+    ],
+    currMonth: String(new Date().getMonth() + 1),
+    month: [
+      {month: '1月', id: '1'},
+      {month: '2月', id: '2'},
+      {month: '3月', id: '3'},
+      {month: '4月', id: '4'},
+      {month: '5月', id: '5'},
+      {month: '6月', id: '6'},
+      {month: '7月', id: '7'},
+      {month: '8月', id: '8'},
+      {month: '9月', id: '9'},
+      {month: '10月', id: '10'},
+      {month: '11月', id: '11'},
+      {month: '12月', id: '12'}
     ]
   }
 
@@ -69,7 +86,6 @@ export default class User extends Component {
   }
 
   select = async record => {
-    console.log(record)
     if (record && record.id) {
       const res = await YearApi.ReqSelect({id: record.id})
       if (res.code === 0) {
@@ -121,7 +137,7 @@ export default class User extends Component {
   }
 
   render () {
-    const {showModal, columns, data, showAddModal} = this.state
+    const {showModal, columns, data, showAddModal, month, currMonth} = this.state
     return (
       <div className='year-wrap'>
         <div className='wrap-title'>年份管理</div>
@@ -138,22 +154,31 @@ export default class User extends Component {
           footer={null}
         >
           <Form
-            initialValues={{ remember: true }}
+            initialValues={{ curr_month: currMonth }}
             onFinish={this.onAddFinish}
             >
             <Form.Item
               label='id：'
               name='id'
-              rules={[{required: true, message: '请输入id'}]}
+              rules={[{required: true, message: 'please input your value'}]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               label='年份：'
               name='year'
-              rules={[{ required: true, message: '请输入年份!'}]}
+              rules={[{ required: true, message: 'please input your value!'}]}
             >
               <Input />
+            </Form.Item>
+            <Form.Item
+              label='默认选择月份'
+              name='curr_month'
+              rules={[{ required: true, message: 'please input your value!'}]}
+            >
+              <Select style={{ width: 180 }} size='large' className='select-el' onChange={this.handleChangeMonth}>
+                {month.map(item => (<Option className='y-select-option' key={item.id} value={item.id}>{item.month}</Option>))}
+              </Select>
             </Form.Item>
             <Form.Item style={{textAlign: 'right'}}>
               <Button htmlType="button" onClick={this.handleCancel}>取消</Button>
@@ -176,16 +201,25 @@ export default class User extends Component {
             <Form.Item
               label='id:'
               name='id'
-              rules={[{required: true, message: '请输入账号!'}]}
+              rules={[{required: true, message: 'please input your value!'}]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               label='年份：'
               name='year'
-              rules={[{ required: true, message: '请输入密码!'}]}
+              rules={[{ required: true, message: 'please input your value!'}]}
             >
               <Input />
+            </Form.Item>
+            <Form.Item
+              label='默认选择月份'
+              name='curr_month'
+              rules={[{ required: true, message: 'please input your value!'}]}
+            >
+              <Select key={currMonth} defaultValue={currMonth} style={{ width: 180 }} size='large' className='select-el' onChange={this.handleChangeMonth}>
+                {month.map(item => (<Option className='y-select-option' key={item.id} value={item.id}>{item.month}</Option>))}
+              </Select>
             </Form.Item>
             <Form.Item style={{textAlign: 'right'}}>
               <Button htmlType="button" onClick={this.handleCancel}>取消</Button>

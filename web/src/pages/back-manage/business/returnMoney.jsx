@@ -113,7 +113,7 @@ export default class ReMoney extends Component {
     return (
       <div className='trech-wrap'>
         <div className='wrap-title'>回款信息</div>
-        <SearchBox search={this.getData} add={this.addData} year={false}></SearchBox>
+        <SearchBox search={this.getData} add={this.addData} year={true}></SearchBox>
         <Table className='table-wrap' columns={columns} dataSource={data} />
         <Modal
           title="新增信息"

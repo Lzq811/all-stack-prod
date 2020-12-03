@@ -88,7 +88,7 @@ module.exports = app => {
       })
       return
     }
-    const model = await Year.updateOne({_id: req.body.key}, {id: req.body.id, year: req.body.year})
+    const model = await Year.updateOne({_id: req.body.key}, req.body)
     if (model && model.ok === 1) {
       res.send({
         code: 0,

@@ -59,7 +59,7 @@ export default class BackManage extends React.Component {
             <Menu className='menu' theme="dark" mode="inline" defaultSelectedKeys={[menuKey]} onClick={this.handleClick}>
               <Menu.Item key="Space" icon={<BlockOutlined />}>首页</Menu.Item>
               <Menu.Item key="User" icon={<UserOutlined />}>账号管理</Menu.Item>
-              <Menu.Item key="Year" icon={<ClockCircleOutlined />}>年份管理</Menu.Item>
+              <Menu.Item key="Year" icon={<ClockCircleOutlined />}>年份月份管理</Menu.Item>
               <Menu.Item key="Target" icon={<ToTopOutlined />}>业务发展目标</Menu.Item>
               <Menu.Item key="Income" icon={<EuroOutlined />}>月营收情况</Menu.Item>
               <Menu.Item key="Employee" icon={<TeamOutlined />}>鹰才情况</Menu.Item>

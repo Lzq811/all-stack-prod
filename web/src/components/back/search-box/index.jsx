@@ -15,8 +15,8 @@ export default class SearchBox extends Component {
   state = {
     curr: '',
     select: [],
-    currMonth: String(new Date().getMonth() + 1),
-    month: [
+    currMonth: sessionStorage.getItem('curr_month') ||  String(new Date().getMonth() + 1),
+    monthList: [
       {month: '1月', id: '1'},
       {month: '2月', id: '2'},
       {month: '3月', id: '3'},
@@ -36,8 +36,9 @@ export default class SearchBox extends Component {
     const res = await YearApi.ReqList({})
     if (res.code === 0) {
       const tmp = res.objectResult.list.filter(item => item.selectDefault)
-      this.setState({curr: tmp[0].id, select: res.objectResult.list})
+      this.setState({curr: tmp[0].id, select: res.objectResult.list || [], currMonth: tmp[0].curr_month})
       sessionStorage.setItem('curr_year', tmp[0].id)
+      sessionStorage.setItem('curr_month', tmp[0].curr_month)
     }
   }
 
@@ -67,8 +68,8 @@ export default class SearchBox extends Component {
 
   render () {
 
-    const { curr, select, month, currMonth } = this.state
-    const { showmonth, year } = this.props
+    const { curr, select, monthList, currMonth } = this.state
+    const { month, year } = this.props
 
     return (
       <div className='search-box-wrap'>
@@ -82,9 +83,9 @@ export default class SearchBox extends Component {
           }
           &nbsp; &nbsp; &nbsp; &nbsp;
           {
-            showmonth ? (
+            month ? (
               <Select key={currMonth} defaultValue={currMonth} style={{ width: 180 }} size='large' className='select-el' onChange={this.handleChangeMonth}>
-                {month.map(item => (<Option className='y-select-option' key={item.id} value={item.id}>{item.month}</Option>))}
+                {monthList.map(item => (<Option className='y-select-option' key={item.id} value={item.id}>{item.month}</Option>))}
               </Select>
             ) : ''
           }

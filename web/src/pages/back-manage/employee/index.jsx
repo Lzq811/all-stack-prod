@@ -111,7 +111,6 @@ export default class Empolyee extends Component {
   }
 
   onFill = record => {
-    console.log(record)
     this.formRef.current.setFieldsValue({
       ...record
     })

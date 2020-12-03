@@ -1,65 +1,113 @@
-/* 业务发展目标页面 */
+/* 公司简介 */
 import React, { Component } from 'react'
 
-import { Form, Input, Button, message } from 'antd'
+import moment from 'moment'
+import { Table, Button, Modal, Form, Input, message } from 'antd'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { FormInstance } from 'antd/lib/form'
-
-import * as TargetApi from '../../../api/target'
 
 import SearchBox from '../../../components/back/search-box'
 
-import './index.less'
+import * as TargetApi from '../../../api/target'
 
-const { Item } = Form
-
-export default class Target extends Component {
+export default class Company extends Component {
 
   formRef = React.createRef(<FormInstance />)
 
   state = {
-    disabled: true
+    editModal: false,
+    addModa: false,
+    curr_id: '',
+    data: [],
+    columns: [
+      {title: '排序', dataIndex: 'order', align: 'center'},
+      {title: '标题', dataIndex: 'title', align: 'center'},
+      {title: '目标值', dataIndex: 'target', align: 'center'},
+      {title: '实际值', dataIndex: 'real', align: 'center'},
+      {title: '完成比例', dataIndex: 'rate', align: 'center'},
+      {title: '操作', dataIndex: '操作', align: 'center', render: (text, record) => (
+        <div className='edit-btn'><Button onClick={() => { this.onUpdate(record) }} className='edit-btn' type="text">编辑</Button><Button onClick={() => { this.del(record) }} className='delete-btn' type="text">删除</Button></div>
+      )}
+    ]
   }
 
   getData = async () => {
-    this.setState({disabled: true})
-    const res = await TargetApi.ReqGet({curr_year: sessionStorage.getItem('curr_year')})
+    const res = await TargetApi.ReqList({curr_year: sessionStorage.getItem('curr_year')})
     if (res.code === 0) {
-      if (res.objectResult.list.length <= 0) {
-        message.info('当前选中月份数据还未创建，请单击新增!')
-      } else {
-        this.onFill(res.objectResult.list[0])
-      }
-    }
-  }
-
-  addData = async () => {
-    const res = await TargetApi.ReqAdd({curr_year: sessionStorage.getItem('curr_year')})
-    if (res.code === 0) {
-      message.success('数据新增成功! 请及时赋值！')
+      this.setState({data: res.objectResult.list || []})
     } else {
       message.error(res.msg)
     }
   }
 
-  onFinish = async (values) => {
-    const year = sessionStorage.getItem('curr_year')
-    const res = await TargetApi.ReqUpdate({curr_year: year, ...values})
-    if (res.code === 0) {
-      message.success('数据更新成功!')
-      this.setState({disabled: true})
+  addData = async () => {
+    this.setState({addModal: true})
+  }
+
+  handleCancel = () => {
+    this.setState({addModal: false, editModal: false})
+  }
+
+  onAddFinish = async values => {
+    const res = await TargetApi.ReqAdd({curr_year: sessionStorage.getItem('curr_year'), ...values})
+    if (res && res.code === 0) {
+      message.success(res.msg || '新增成功!')
+      this.getData()
+      this.setState({addModal: false})
     } else {
-      message.error('数据更新失败!')
+      message.error('新增失败!')
     }
   }
 
+  onUpdateFinish = async values => {
+    const res = await TargetApi.ReqUpdate({id: this.state.curr_id, curr_year: sessionStorage.getItem('curr_year'), ...values})
+    if (res && res.code === 0) {
+      message.success(res.msg || '更新成功!')
+      this.getData()
+      this.setState({editModal: false})
+    } else {
+      message.error('更新失败!')
+    }
+  }
+
+  onUpdate = record => {
+    this.setState({editModal: true, curr_id: record._id})
+    setTimeout(() => {
+      this.onFill(record)
+    }, 200)
+  }
+
   onFill = record => {
-    this.formRef.current.setFieldsValue({
-      ...record
+    let tmp = {...record}
+    tmp.signdate = moment(tmp.signdate)
+    this.formRef.current.setFieldsValue(tmp)
+    this.setState({editModal: true})
+  }
+
+  del = async record => {
+    Modal.confirm({
+      title: '删除!',
+      icon: <ExclamationCircleOutlined />,
+      content: '您确认要删除该用户吗?',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => { this.delSure(record) }
     })
   }
 
-  edit = () => {
-    this.setState({disabled: false})
+  delSure = async record => {
+    const res = await TargetApi.ReqDelete({id: record._id})
+    if (res.code === 0) {
+      message.success('删除成功!')
+      this.getData()
+    } else {
+      message.error('删除失败!')
+    }
+  }
+
+  formatDate = time => {
+    const tmp = new Date(time)
+    return `${tmp.getFullYear()}-${tmp.getMonth() + 1}-${tmp.getDate()}`
   }
 
   componentDidMount () {
@@ -67,191 +115,116 @@ export default class Target extends Component {
   }
 
   render () {
-    const { disabled } = this.state
+    const { columns, data, editModal, addModal} = this.state
     return (
-      <div className='target-wrap'>
-        <div className='wrap-title'>业务发展目标</div>
-        <SearchBox search={this.getData} add={this.addData} year={true}></SearchBox>
-        <div className='form-content'>
+      <div className='trech-wrap'>
+        <div className='wrap-title'>最新签约信息</div>
+        <SearchBox search={this.getData} add={this.addData} year={false}></SearchBox>
+        <Table className='table-wrap' columns={columns} dataSource={data} />
+        <Modal
+          title="新增信息"
+          visible={addModal}
+          closable={false}
+          footer={null}
+        >
+          <Form
+            initialValues={{ newsign: true, status: true, signdate: moment() }}
+            onFinish={this.onAddFinish}
+            >
+            <Form.Item
+              label='排序:'
+              name='order'
+              rules={[{required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label='标题:'
+              name='title'
+              rules={[{required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label='目标值:'
+              name='target'
+              rules={[{ required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label='实际值:'
+              name='real'
+              rules={[{ required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label='完成比例:'
+              name='rate'
+              rules={[{ required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item style={{textAlign: 'right'}}>
+              <Button htmlType="button" onClick={this.handleCancel}>取消</Button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button type="primary" htmlType="submit"> 提交 </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+        <Modal
+          title="修改用户信息"
+          visible={editModal}
+          closable={false}
+          footer={null}
+        >
           <Form
             ref={this.formRef}
-            initialValues={{ remember: true }}
-            onFinish={this.onFinish}>
-              <div className='form-item'>
-                <p className='title'>合同额</p>
-                <Item
-                  className='input-item'
-                  label="目标:"
-                  name='contract_target'
-                  rules={[{ required: true, message: 'Please input your target value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="实际:"
-                  name='contract_real'
-                  rules={[{ required: true, message: 'Please input your real value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="完成率:"
-                  name='contract_rate'
-                  rules={[{ required: true, message: 'Please input your done rate value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-              </div>
-              <div className='form-item'>
-                <p className='title'>首付款</p>
-                <Item
-                  className='input-item'
-                  label="目标:"
-                  name='firstpay_target'
-                  rules={[{ required: true, message: 'Please input your target value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="实际:"
-                  name='firstpay_real'
-                  rules={[{ required: true, message: 'Please input your real value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="完成率:"
-                  name='firstpay_rate'
-                  rules={[{ required: true, message: 'Please input your done rate value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-              </div>
-              <div className='form-item'>
-                <p className='title'>支付率</p>
-                <Item
-                  className='input-item'
-                  label="目标:"
-                  name='payrate_target'
-                  rules={[{ required: true, message: 'Please input your target value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="实际:"
-                  name='payrate_real'
-                  rules={[{ required: true, message: 'Please input your real value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="完成率:"
-                  name='payrate_rate'
-                  rules={[{ required: true, message: 'Please input your done rate value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-              </div>
-              <div className='form-item'>
-                <p className='title'>毛利率</p>
-                <Item
-                  className='input-item'
-                  label="目标:"
-                  name='rateofmargin_target'
-                  rules={[{ required: true, message: 'Please input your target value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="实际:"
-                  name='rateofmargin_real'
-                  rules={[{ required: true, message: 'Please input your real value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="完成率:"
-                  name='rateofmargin_rate'
-                  rules={[{ required: true, message: 'Please input your done rate value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-              </div>
-              <div className='form-item'>
-                <p className='title'>利润</p>
-                <Item
-                  className='input-item'
-                  label="目标:"
-                  name='profit_target'
-                  rules={[{ required: true, message: 'Please input your target value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="实际:"
-                  name='profit_real'
-                  rules={[{ required: true, message: 'Please input your real value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="完成率:"
-                  name='profit_rate'
-                  rules={[{ required: true, message: 'Please input your done rate value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-              </div>
-              <div className='form-item'>
-                <p className='title'>经营成本</p>
-                <Item
-                  className='input-item'
-                  label="目标:"
-                  name='cost_target'
-                  rules={[{ required: true, message: 'Please input your target value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="实际:"
-                  name='cost_real'
-                  rules={[{ required: true, message: 'Please input your real value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="完成率:"
-                  name='cost_rate'
-                  rules={[{ required: true, message: 'Please input your done rate value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-              </div>
-              <div className='form-item'>
-                <p className='title'>收入</p>
-                <Item
-                  className='input-item'
-                  label="目标:"
-                  name='income_target'
-                  rules={[{ required: true, message: 'Please input your target value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="实际:"
-                  name='income_real'
-                  rules={[{ required: true, message: 'Please input your real value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-                <Item
-                  className='input-item'
-                  label="完成率:"
-                  name='income_rate'
-                  rules={[{ required: true, message: 'Please input your done rate value!' }]}>
-                  <Input disabled={disabled}/>
-                </Item>
-              </div>
-              <Item className='search-btn' style={{textAlign: 'center', paddingTop: '10px'}}>
-                <Button type="primary" htmlType="button" danger onClick={this.edit}> 编辑 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Button type="primary" htmlType="submit"> 保存 </Button>
-              </Item>
+            onFinish={this.onUpdateFinish}
+            >
+            <Form.Item
+              label='排序:'
+              name='order'
+              rules={[{required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label='标题:'
+              name='title'
+              rules={[{required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label='目标值:'
+              name='target'
+              rules={[{ required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label='实际值:'
+              name='real'
+              rules={[{ required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label='完成比例:'
+              name='rate'
+              rules={[{ required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item style={{textAlign: 'right'}}>
+              <Button htmlType="button" onClick={this.handleCancel}>取消</Button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button type="primary" htmlType="submit"> 提交 </Button>
+            </Form.Item>
           </Form>
-        </div>
+        </Modal>
       </div>
     )
   }
