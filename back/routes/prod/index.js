@@ -6,7 +6,7 @@ module.exports = app => {
   const Prod = require('../../models/Prod')
 
   router.post('/list', async (req, res) => {
-    const model = await Prod.find().sort('-signdate') // 根据 签约日期 倒排序
+    const model = await Prod.find(req.body.city ? {city: req.body.city} : {}).sort('-signdate') // 根据 签约日期 倒排序
     if (model && model.length >= 0) {
       res.send({
         code: 0,

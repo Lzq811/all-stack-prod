@@ -26,6 +26,7 @@ export default class City extends Component {
     data: [],
     columns: [
       {title: '项目名称', dataIndex: 'title', align: 'center'},
+      {title: '所在城市', dataIndex: 'city', align: 'center'},
       {title: '总交付时间', dataIndex: 'final_time', align: 'center', render: text => text ? this.formatDate(text) : '' },
       {title: '总项目进度', dataIndex: 'total_rate', align: 'center'},
       {title: '合同进度', dataIndex: 'constract_rate', align: 'center'},

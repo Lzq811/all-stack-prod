@@ -22,12 +22,56 @@
         font-size: 16px;
       }
     }
-    .desc-title {
+    .pop-item-desc-title {
       text-align: center;
       color: #00C2FF;
       font-size: 16px;
       font-weight: 700;
       margin: 0;
+    }
+  }
+  .cityes-box {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    .city {
+      cursor: pointer;
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      .pop-title {
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        width: 80px;
+        height: 80px;
+        display: inline-block;
+        z-index: 1000;
+        font-size: 18px;
+        font-weight: 700;
+        color: #00E9FF;
+      }
+      .out-circle {
+        position: absolute;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 3px solid #64EDFC;
+        animation: outcircle linear 1s infinite;
+        box-shadow: 0 0 6px inset;
+      }
+      .inner-circle {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 3px solid #64EDFC;
+        animation: innercircle linear 2s infinite;
+        box-shadow: 0 0 6px inset;
+      }
     }
   }
   .bottom-box {
@@ -55,7 +99,7 @@
         text-align: center;
         color: #00C2FF;
       }
-      .desc-sub-title {
+      .pop-item-desc-sub-title {
         position: absolute;
         top: 80px;
         width: 100px;
@@ -64,4 +108,60 @@
       }
     }
   }
+  @keyframes outcircle {
+    0% {width: 0px; height: 0px; opacity: 1; top: 25px; left: 25px;}
+    100% {width: 50px; height: 50px; opacity: 0; top: 0px; left: 0px;}
+  }
+  @keyframes innercircle {
+    0% {width: 0px; height: 0px; opacity: 1; top: 25px; left: 25px;}
+    100% {width: 46px; height: 46px; opacity: 0; top: 2px; left: 2px;}
+  }
+}
+
+.chile-pop {
+  cursor: pointer;
+  font-size: 20px;
+  color: #66FDFF;
+}
+.pop-sub-title {
+  font-size: 16px;
+  color: #fff;
+}
+
+.ant-popover-inner {
+  background: #2380FF;
+  font-size: 14px;
+  box-shadow: 0 0 10px #2380FF;
+}
+
+.pop-title-inner {
+  color: #66FDFF;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.pop-item-desc {
+  color: #fff;
+  font-size: 14px;
+  max-width: 300px;
+}
+
+.ant-popover-inner-content {
+  max-height: 440px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.ant-popover-inner-content::-webkit-scrollbar{
+  width: 6px;
+  height: 6px;
+}
+.ant-popover-inner-content::-webkit-scrollbar-track{
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.ant-popover-inner-content::-webkit-scrollbar-thumb{
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
 }
