@@ -1,5 +1,11 @@
 const { override, fixBabelImports, addLessLoader } = require('customize-cra')
 
+/* 把大包的build文件夹名称改成dist */
+const path = require('path')
+const paths = require('react-scripts/config/paths')
+paths.appBuild = path.join(path.dirname(paths.appBuild), 'dist')
+
+
 module.exports = override(
   fixBabelImports('antd', {
     libraryDirectory: 'es',

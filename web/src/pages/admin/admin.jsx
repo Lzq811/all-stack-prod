@@ -4,6 +4,9 @@ import React, {Component} from 'react'
 
 import {message} from 'antd'
 
+import backImg from '../../assets/image/afc_first.png'
+import webImg from '../../assets/image/screen.png'
+
 import './admin.less'
 export default class Admin extends Component {
 
@@ -11,12 +14,12 @@ export default class Admin extends Component {
     screenData: [
       {
         itemName: '大屏展示',
-        pictureUrl: 'http://big-screen.oss-cn-shenzhen.aliyuncs.com/beijingRoad/develop.png',
+        pictureUrl: webImg,
         targetLink: '/web'
       },
       {
         itemName: '后台管理',
-        pictureUrl: 'http://big-screen.oss-cn-shenzhen.aliyuncs.com/beijingRoad/passenger.png',
+        pictureUrl: backImg,
         targetLink: '/back'
       }
     ],
