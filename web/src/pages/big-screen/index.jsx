@@ -231,7 +231,7 @@ export default class BackManage extends React.Component {
             <Empolyee empolyee={empolyee} />
           </div>
           <div className='center-container'>
-            <Center company={company} incomeTotal={incomeTotal} curr_year={curr_year} />
+            <Center company={company} incomeTotal={incomeTotal} />
           </div>
           <div className='right-container'>
             <Business terch={terch} product={product} business={business} reMoney={reMoney} delivery={delivery} />

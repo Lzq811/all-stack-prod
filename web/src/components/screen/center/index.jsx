@@ -50,13 +50,13 @@ export default class Center extends React.Component {
 
   render () {
     const {citys} = this.state
-    const {company, incomeTotal, curr_year} = this.props
+    const {company, incomeTotal} = this.props
     return (
       <div className='center-wrap'>
         {/* 累计营收框 */}
         <div className='income-box'>
           <h2 className='value'>{Number(incomeTotal).toLocaleString()} <span>万</span></h2>
-          <h4 className='pop-item-desc-title'>{curr_year}年累计营收</h4>
+          <h4 className='pop-item-desc-title'>公司至今累计总营收</h4>
         </div>
         <div className='cityes-box'>
           {citys.map(item => <div className='city' style={{top: `${item.top}px`, left: `${item.left}px`}} key={item.title}>
