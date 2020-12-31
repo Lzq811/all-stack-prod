@@ -207,7 +207,6 @@ export default class BackManage extends React.Component {
       this.getSign()
       this.getBusiness()
     }, 200)
-    
   }
 
   componentDidMount () {
@@ -220,9 +219,10 @@ export default class BackManage extends React.Component {
 
   render () {
     const {curr_year, yearList, company, incomeTotal, target, month, monthIncome, empolyee, sign, terch, product, business, reMoney, delivery} = this.state
+    const {history} = this.props
     return (
       <div className='big-screen-page'>
-        <Header />
+        <Header history={history} />
         <Year onChangeYear={this.onChangeYear} yearList={yearList} curr_year={curr_year} />
         <div className='main-container'>
           <div className='left-container'>

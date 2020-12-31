@@ -68,17 +68,17 @@ export default function (props) {
         name: '鹰云智能',
         type: 'bar',
         barGap: 0,
-        barWidth: '20%'
+        barWidth: '16%'
       },
       {
         name: '正佳网',
         type: 'bar',
-        barWidth: '20%'
+        barWidth: '16%'
       },
       {
         name: '合计',
         type: 'bar',
-        barWidth: '20%'
+        barWidth: '16%'
       }
     ]
   })

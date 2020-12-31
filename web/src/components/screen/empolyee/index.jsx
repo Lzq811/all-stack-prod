@@ -49,7 +49,7 @@ export default function (props) {
     series.push({
       name: item.age_interval + '后',
       type: 'bar',
-      barWidth: 16,
+      barWidth: 12,
       stack: '总量',
       label: {
         show: true,

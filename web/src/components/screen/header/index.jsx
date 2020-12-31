@@ -23,6 +23,11 @@ export default class Header extends Component {
     this.setState({time})
   }
 
+  toManage = () => {
+    const {history} = this.props
+    history.push('/back')
+  }
+
   componentDidMount () {
     this.initDate()
     this.initTime()
@@ -43,6 +48,7 @@ export default class Header extends Component {
     const {date, week, time} = this.state
     return (
       <div className='header-wrap'>
+        <div className='logo-pos' onClick={() => { this.toManage() }}></div>
         <h1 className='screen-title'>鹰云智能业务发展状况大屏</h1>
         <div className='time-box'>
           <p className='time'>{date} &nbsp; {week}</p>

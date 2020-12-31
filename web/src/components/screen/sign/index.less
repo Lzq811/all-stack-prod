@@ -70,8 +70,14 @@
           border-radius: 4px;
           text-align: center;
           line-height: 14px;
+          animation: blingBags infinite 1s ease-in-out;
         }
       }
     }
+  }
+  @keyframes blingBags {
+    0% { opacity: 1}
+    50% { opacity: 0.4 }
+    100% { opacity: 1 }
   }
 }

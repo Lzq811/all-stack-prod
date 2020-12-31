@@ -20,7 +20,7 @@ export default function (props) {
             <h3 className='value'>合同金额: {item.money}万</h3>
             <h3 className='prod-name'>{item.productname}</h3>
             <div className='sign-time'>{moment(item.signdate).format('YYYY年MM月DD日')}</div>
-            {item.newsign ? <div className='bag'>new</div> : ''}
+            {item.newsign ? <div className='bag' style={{animation: `blingBags infinite 1s ease-in-out ${Math.random()*10}s`}}>new</div> : ''}
           </div>
         </div>)}
       </div>

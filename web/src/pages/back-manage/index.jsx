@@ -87,6 +87,7 @@ export default class BackManage extends React.Component {
                 <Breadcrumb.Item>{breadcrumb}</Breadcrumb.Item>
               </Breadcrumb>
               <div className='user-tips'>
+                <h2 className='current-user' onClick={() => {this.props.history.push('/web')}}>前往大屏页面</h2>
                 <h2 className='current-user' onClick={() => {this.props.history.push('/admin')}}>回到列表页</h2>
                 <Button className='login-out-btn' type='link' onClick={this.loginout} danger>退出</Button>
               </div>

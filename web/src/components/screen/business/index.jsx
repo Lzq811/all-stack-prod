@@ -19,7 +19,7 @@ export default function (props) {
       textAlign: 'center',
       left: '48%',
       top: titleTop,
-      textStyle: {color: '#fff', fontSize: 13}
+      textStyle: {color: '#fff', fontSize: 12}
     },
     legend: {
       show: isshow,
@@ -40,7 +40,7 @@ export default function (props) {
     series: {
       type: 'pie',
       center: ['50%', top],
-      radius: [32, 42],
+      radius: [34, 40],
       avoidLabelOverlap: false,
       label: {
         show: false,
@@ -78,7 +78,7 @@ export default function (props) {
       {
         type: 'pie',
         center: ['24%', '38%'],
-        radius: [32, 40],
+        radius: [34, 40],
         avoidLabelOverlap: false,
         label: {
           show: true,
@@ -98,7 +98,7 @@ export default function (props) {
       {
         type: 'pie',
         center: ['76%', '38%'],
-        radius: [32, 40],
+        radius: [34, 40],
         avoidLabelOverlap: false,
         label: {
           show: true,
