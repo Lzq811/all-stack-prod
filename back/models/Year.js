@@ -4,6 +4,7 @@ const schema = new mongoose.Schema({
   year: String,
   id: String,
   curr_month: String,
+  order: String,
   selectDefault: { type: Boolean, default: false }
 })
 

@@ -19,6 +19,7 @@ export default class User extends Component {
     currUpdateId: '',
     data: [],
     columns: [
+      {title: '排序', dataIndex: 'order', align: 'center'},
       {title: 'id', dataIndex: 'id', align: 'center'},
       {title: '年份', dataIndex: 'year', align: 'center'},
       {title: '默认月份', dataIndex: 'curr_month', align: 'center', render: text => `${text}月`},
@@ -103,7 +104,7 @@ export default class User extends Component {
 
 
   onAddFinish = async values => {
-    if (values && values.id && values.year) {
+    if (values && values.id && values.year && values.order) {
       const res = await YearApi.ReqAdd(values)
       if (res.code === 0) {
         message.success(res.msg)
@@ -172,6 +173,13 @@ export default class User extends Component {
               <Input />
             </Form.Item>
             <Form.Item
+              label='排序：'
+              name='order'
+              rules={[{ required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
               label='默认选择月份'
               name='curr_month'
               rules={[{ required: true, message: 'please input your value!'}]}
@@ -195,7 +203,6 @@ export default class User extends Component {
         >
           <Form
             ref={this.formRef}
-            initialValues={{ remember: true }}
             onFinish={this.onUpdateFinish}
             >
             <Form.Item
@@ -208,6 +215,13 @@ export default class User extends Component {
             <Form.Item
               label='年份：'
               name='year'
+              rules={[{ required: true, message: 'please input your value!'}]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label='排序：'
+              name='order'
               rules={[{ required: true, message: 'please input your value!'}]}
             >
               <Input />

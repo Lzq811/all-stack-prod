@@ -5,7 +5,7 @@ module.exports = app => {
   const Year = require('../../models/Year')
 
   router.post('/list', async (req, res) => {
-    const model = await Year.find()
+    const model = await Year.find().sort('order')
     if (model && model.length >= 0) {
       res.send({
         code: 0,
